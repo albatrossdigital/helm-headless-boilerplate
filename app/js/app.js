@@ -31,7 +31,7 @@ angular.module('app', [
 			$rootScope.$stateParams = $stateParams;
 
       $rootScope.pageUrl = 'http://localhost:9000';
-      $rootScope.apiUrl = 'http://drupal.local';
+      $rootScope.apiUrl = 'http://api.soar-headless.albatrossdemos.com';
 
        // Share42 script
       var share42 = document.createElement('script');
