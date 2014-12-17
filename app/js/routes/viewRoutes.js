@@ -12,7 +12,7 @@ angular.module('app.view', [
 
         // Base route handles getching data, sub-routing 
         .state("view", {
-          url: "/view/:name",
+          url: "/list/:entityType/:name",
           template: '<div class="view view-{{name}}" ui-view></div>',
           data: { 
             title: 'View',                 // Sets meta title
@@ -22,46 +22,30 @@ angular.module('app.view', [
           },
           resolve: {
             items: function($stateParams, View) {
-              return View.query({name: $stateParams.name}).$promise.then(function(data) {
+              return View.query($stateParams).$promise.then(function(data) {
                 return data;
               });
             }
           },
-          controller: function($scope, $state, items, View){
+          controller: function($scope, $rootScope, $state, items, View, viewsFactory){
             $scope.items = items;
             $scope.name = $state.params.name;
+            $scope.entityType = $state.params.entityType;
 
             // @todo: Set route metadata (is this possible?)
 
             // Determine the appropriate sub-route
             $scope.$watch('items', function() {
-              var stateName = 'view.' + $scope.name;
-              try {
-                var state = $state.get(stateName);
-                if (state == undefined || state == null) {
-                  throw "myException";
-                }
-              }
-              catch(e) {
-                stateName = 'view.base';
-              }
-              $state.go(stateName);
+              $rootScope.goSubRoute('view', $scope.entityType+$scope.name);
             });
+
+            // Helper function 
 
             // Helper function for infinite scroll pager
             $scope.currentPage = 0;
             $scope.loadingPage = false;
             $scope.addItems = function() {
-              if (!$scope.loadingPage && $scope.items != undefined && $scope.items.length > 0) {
-                $scope.currentPage++;
-                var newData = View.query({name: $scope.name, page: $scope.currentPage}, function() {
-                  if (newData.length > 0) {
-                    Array.prototype.push.apply($scope.items, newData);
-                    $scope.loadingPage = false;
-                  }
-                });
-              }
-              $scope.loadingPage = true;
+              viewsFactory.pageLoad($scope, {entityType: $scope.entityType, name: $scope.name, page: $scope.currentPage});
             }
           }
         })
@@ -72,14 +56,38 @@ angular.module('app.view', [
         })
 
         // Custom template for lists of the article content type
-        /*
-        .state("view.article", {
-          templateUrl: 'views/view/article.html'
-        })
-        */
         
+        .state("article", {
+          templateUrl: 'views/view/article.html',
+          url: '/articles?tag',
+          resolve: {
+            items: function($stateParams, View) {
+              return View.query({entityType: 'node', name: 'article', a: $stateParams.tag}).$promise.then(function(data) {
+                return data;
+              });
+            }
+          },
+          controller: function($scope, $rootScope, $state, items, View, viewsFactory){
+            $scope.items = items;
+            $scope.tag = $state.params.tag;
+            
+            // Get tags
+            $scope.activeTerm = null;
+            View.query({entityType: 'term', name: 'tags'}, function(data) {
+              $scope.terms = data;
+              console.log(data);
+            });
 
-
+            // Helper function for infinite scroll pager
+            $scope.currentPage = 0;
+            $scope.loadingPage = false;
+            $scope.addItems = function() {
+              viewsFactory.pageLoad($scope, {entityType: 'node', name: 'article', a: $state.params.tag, page: $scope.currentPage});
+            }
+          } 
+        })
+        
+        
     }
   ]
 );

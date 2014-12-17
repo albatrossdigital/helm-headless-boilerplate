@@ -7,6 +7,8 @@
 //***************************************
 
 angular.module('app', [
+  'drupalService',
+  'app.menu',
   'app.page',
   'app.node',
   'app.view',
@@ -31,7 +33,7 @@ angular.module('app', [
 			$rootScope.$stateParams = $stateParams;
 
       $rootScope.pageUrl = 'http://localhost:9000';
-      $rootScope.apiUrl = 'http://api.soar-headless.albatrossdemos.com';
+      $rootScope.apiUrl = 'http://api.ad.albatrossdemos.com';
 
        // Share42 script
       var share42 = document.createElement('script');
@@ -101,6 +103,22 @@ angular.module('app', [
           }
         }
       );
+
+      // Helper function detects the correct sub route to go to (for templating)
+      $rootScope.goSubRoute = function(baseRoute, subRoute, baseName) {
+        baseName = baseName == undefined ? 'base' : baseName;
+        var stateName = baseRoute+'.'+subRoute;
+        try {
+          var state = $state.get(stateName);
+          if (state == undefined || state == null) {
+            throw "myException";
+          }
+        }
+        catch(e) {
+          stateName = baseRoute+'.'+baseName;
+        }
+        $state.go(stateName);
+      }
 		
 		}
 	]
