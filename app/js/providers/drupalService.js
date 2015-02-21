@@ -8,44 +8,54 @@ angular.module('drupalService', ['ngResource'])
       {
         get: {
           method:'GET',
-          transformRequest: function(data, headersGetter) {
-            headersGetter()['Accept'] = 'application/hal+json';
-          }
+          cache: true
         }
       }
     );
   }])
 
   .factory('View', ['$resource', '$rootScope', function ($resource, $rootScope) {
-    return $resource($rootScope.apiUrl + '/rest/:entityType/:name/:a/:b/:c', 
+    return $resource($rootScope.apiUrl + '/rest/:entity/:bundle/:a/:b/:c', 
       {
-        entityType: '@entityType',
-        name: '@name',
-        a0: '@a0'
+        entityType: '@entity',
+        name: '@bundle',
+        a: '@arg0'
       },
       {
         query: {
           method:'GET',
           cache: true,
-          isArray: true,
-          transformRequest: function(data, headersGetter) {
-            headersGetter()['Accept'] = 'application/hal+json';
-          }
+          isArray: true
         }
       }
     );
   }])
 
-  .factory('TaxonomyTerm', ['$resource', function ($resource) {
-      return $resource('/taxonomy/term/:tid', {tid: '@tid'}, {});
+  .factory('TaxonomyTerm', ['$resource', '$rootScope', function ($resource, $rootScope) {
+    return $resource($rootScope.apiUrl + '/taxonomy/term/:tid', {tid: '@tid'}, {});
   }])
 
-  .factory('User', ['$resource', function ($resource) {
-      return $resource('/user/:uid', {uid: '@uid'}, {});
+  .factory('TaxonomyVocabularyTree', ['$resource', '$rootScope', function ($resource, $rootScope) {
+    return $resource($rootScope.apiUrl + '/taxonomy_vocabulary/getTree', 
+      {
+        vid: '@vid',
+      },
+      {
+        query: {
+          method:'POST',
+          cache: true,
+          isArray: true
+        }
+      }
+    )
   }])
 
-  .factory('Comment', ['$resource', function ($resource) {
-      return $resource('/node/:nid/comments', {nid: '@nid'}, {
+  .factory('User', ['$resource', '$rootScope', function ($resource, $rootScope) {
+    return $resource($rootScope.apiUrl + '/user/:uid', {uid: '@uid'}, {});
+  }])
+
+  .factory('Comment', ['$resource', '$rootScope', function ($resource, $rootScope) {
+      return $resource($rootScope.apiUrl + '/node/:nid/comments', {nid: '@nid'}, {
           'post': {
               method: 'POST',
               url: '/entity/comment'

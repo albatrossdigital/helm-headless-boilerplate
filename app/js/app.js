@@ -9,9 +9,11 @@
 angular.module('app', [
   'drupalService',
   'app.menu',
-  'app.page',
+  'app.static',
   'app.node',
   'app.view',
+  'app.term',
+  'app.vocabulary',
   'ui.router',
   'metaInfo',
   'scrollTo',
@@ -20,7 +22,7 @@ angular.module('app', [
   'ngAnimate',
   'ngTouch',
   'ngResource',
-  'afkl.lazyImage',
+  //'afkl.lazyImage',
   'infinite-scroll'
 ])
 
@@ -33,7 +35,7 @@ angular.module('app', [
 			$rootScope.$stateParams = $stateParams;
 
       $rootScope.pageUrl = 'http://localhost:9000';
-      $rootScope.apiUrl = 'http://api.ad.albatrossdemos.com';
+      $rootScope.apiUrl = 'http://soar-city.local/api/311';
 
        // Share42 script
       var share42 = document.createElement('script');
@@ -160,24 +162,8 @@ angular.module('app', [
       //////////////////////////
 
       // Use $stateProvider to configure your states.
-      $stateProvider
+      //$stateProvider
 
-        //////////
-        // Home //
-        //////////
-
-        .state("home", {
-
-          // Use a url of "/" to set a state as the "index".
-          url: "/",
-
-          // Example of an inline template string. By default, templates
-          // will populate the ui-view within the parent state's template.
-          // For top level states, like this one, the parent template is
-          // the index.html file. So this template will be inserted into the
-          // ui-view within index.html.
-          templateUrl: 'views/home.html'
-        });
     }
   ]
 );

@@ -51,13 +51,8 @@
 
             <!-- Collect the nav links, forms, and other content for toggling -->
             <div class="collapse navbar-collapse" id="navbar-collapse">
-              <ul class="nav navbar-nav">
-                <li class="active"><a href="#">Link <span class="sr-only">(current)</span></a></li>
-                <li><a href="#">Link</a></li>
-              </ul>
-              <ul class="nav navbar-nav navbar-right">
-                <li><a href="#">Link</a></li>
-              </ul>
+              <div menu />
+            </div>
           </div><!-- /.container-fluid -->
         </nav>
 
@@ -65,9 +60,7 @@
 
         <footer class="footer clearfix" ng-controller="metaInfoCtrl">
             <div class="pull-left">
-              <ul>
-                <li ui-sref-active="active"><a href="#" ui-sref="about">About</a></li>
-              </ul>
+              <div menu />
             </div>
             <div class="pull-right">
                   Share <div class="share42init" ng-attr-data-url="{{$root.pageUrl}}" ng-attr-data-title="{{pageTitle()}}" ng-attr-data-image="{{$root.pageUrl}}/images/logo.png" data-icons-file="../../images/share42icons.png" ng-attr-data-description="{{metaDescription()}}"></div>
@@ -111,9 +104,11 @@
     <!-- Utilities -->
     <script src="js/utilities/scrollTo.js"></script>
     <!-- Routes -->
-    <script src="js/routes/pageRoutes.js"></script>
+    <script src="js/routes/staticRoutes.js"></script>
     <script src="js/routes/nodeRoutes.js"></script>
     <script src="js/routes/viewRoutes.js"></script>
+    <script src="js/routes/termRoutes.js"></script>
+    <script src="js/routes/vocabularyRoutes.js"></script>
     <!-- Providers -->
     <script src="js/providers/metaInfo.js"></script>
     <script src="js/providers/drupalService.js"></script>

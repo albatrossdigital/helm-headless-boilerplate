@@ -1,6 +1,6 @@
 'use strict';
 
-angular.module('app.node', [
+angular.module('app.term', [
   'ui.router' 
 ])
 
@@ -11,8 +11,8 @@ angular.module('app.node', [
       $stateProvider
          
         // Base route handles getching data, sub-routing 
-        .state("node", {
-          url: "/node/:nid",
+        .state("term", {
+          url: "/term/:nid",
           template: '<div class="node node-{{type}}" ui-view></div>',
           data: { 
             title: 'Node',                 // Sets meta title
@@ -45,31 +45,9 @@ angular.module('app.node', [
         })
 
         // Generic node template
-        .state("node.base", {
-          templateUrl: 'views/node.html'
-        })
-
-        // Custom template for article content type
-        
-        .state("node.article", {
-          templateUrl: 'views/node/article.html',
-          controller: function($scope, $rootScope, $state, node){
-            $scope.node = node;
-            $scope.type = node.type[0].target_id;
-
-            // Set route metadata
-            // @todo: make this work
-            $state.$current.data.title = node.title[0].value;
-            //@todo: keywords, description
-
-            // Determine the appropriate sub-route
-            $scope.$watch('node', function() {
-              $rootScope.goSubRoute('node', $scope.type);
-            });            
-          }
-        })
-        
-
+        .state("term.base", {
+          templateUrl: 'views/term/term-base.html'
+        })    
 
     }
   ]
